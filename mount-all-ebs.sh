@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ###########################################################################
-# script to attach unmounted volumes (including swap)
+# script to attach unmounted ebs volumes (including swap) to ec2 instances
 ###########################################################################
 
 ###########################################################################
@@ -9,7 +9,7 @@
 ###########################################################################
 
 # aws cli
-# athentication
+# authentication
 # authorization to run ec2 describe-instances and describe-volumes
 
 # ebs volumes must be tagged with erp:mount_point
