@@ -1,9 +1,20 @@
 #!/bin/bash
 
 ###########################################################################
-# script to attach unmounted ebs volumes (including swap) to ec2 instances
+# script to attach unmounted ebs volumes to an ec2 instance
 ###########################################################################
-
+#
+#   - intended to be executed from the ec2 instance either via userdata or
+#     a similar mechanism such as ansible or cloud-init
+#   - needs to be executed by root
+#   - this script will mount a swap volume
+#   - gets instance id from metadata URL
+#   - gets volume data from aws cli ec2 commands and the os
+#   - linux only - tested on redhat
+#   - mounts UUID (to persist across restarts)
+#   - updates fstab
+#   - ymmv
+#
 ###########################################################################
 # dependencies
 ###########################################################################
@@ -15,11 +26,14 @@
 # ebs volumes must be tagged with erp:mount_point
 # eg. { "erp:mount_point": "/my-directory" }
 
-# jq
-yum install jq -y
-
 AWS_REGION=us-east-1
 FS=xfs
+PKG=yum
+
+# jq
+${PKG} install jq -y
+
+# util-linux v2.27+ required (lsblk json ouput)
 
 ###########################################################################
 # main
