@@ -31,8 +31,8 @@
 # authentication
 # authorization to run ec2 describe-instances and describe-volumes
 #
-# ebs volumes must be tagged with erp:mount_point
-# eg. { "erp:mount_point": "/my-directory" }
+# ebs volumes must be tagged with "mount_point"
+# eg. { "mount_point": "/my-directory" }
 
 ###########################################################################
 
