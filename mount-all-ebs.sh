@@ -67,10 +67,10 @@ for VOLUMEID in $(aws ec2 describe-instances --region ${AWS_REGION} --instance-i
         FULLBLOCKDEVICE="/dev/${BLOCKDEVICE}"
         DEVICESERIAL=$(lsblk -o SERIAL -d -n ${FULLBLOCKDEVICE})
 
-        # skip root volume
+        # skip mounted root volume
         if [ "${FULLBLOCKDEVICE}" != "/dev/nvme0n1" ]; then
 
-        # skip swap
+        # skip mounted swap volume
         SWAP=$(swapon --noheadings | awk '{print $1}')
         if [ "${FULLBLOCKDEVICE}" != "${SWAP}" ]; then
 
