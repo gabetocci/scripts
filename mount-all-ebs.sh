@@ -16,8 +16,9 @@
 #   - ymmv
 #
 ###########################################################################
-# ANSIBLE TASK EXAMPLE
+# ansible task
 ###########################################################################
+#
 #- name: Run EBS mounting script
 #  script: /root/bin/mount_ebs.sh
 #  args:
@@ -33,7 +34,7 @@
 #
 # ebs volumes must be tagged with "mount_point"
 # eg. { "mount_point": "/my-directory" }
-
+#
 ###########################################################################
 
 DEBUG=false
@@ -70,25 +71,25 @@ for VOLUMEID in $(aws ec2 describe-instances --region ${AWS_REGION} --instance-i
         # skip mounted root volume
         if [ "${FULLBLOCKDEVICE}" != "/dev/nvme0n1" ]; then
 
-        # skip mounted swap volume
-        SWAP=$(swapon --noheadings | awk '{print $1}')
-        if [ "${FULLBLOCKDEVICE}" != "${SWAP}" ]; then
+            # skip mounted swap volume
+            SWAP=$(swapon --noheadings | awk '{print $1}')
+            if [ "${FULLBLOCKDEVICE}" != "${SWAP}" ]; then
 
-            # check this volume 
-            if [ "${DEVICESERIAL}" == "${TRIMVOLUMEID}" ]; then
+                # check this volume 
+                if [ "${DEVICESERIAL}" == "${TRIMVOLUMEID}" ]; then
 
-                UUID=$(blkid ${FULLBLOCKDEVICE} | awk '{print $2}' | tr -d '"')
+                    UUID=$(blkid ${FULLBLOCKDEVICE} | awk '{print $2}' | tr -d '"')
 
-                echo FULLBLOCKDEVICE=${FULLBLOCKDEVICE}
-                echo ${UUID}
+                    echo FULLBLOCKDEVICE=${FULLBLOCKDEVICE}
+                    echo ${UUID}
 
-                 # mount devices that have not been mounted (no UUID)
-                if [ "${UUID}" == "" ]; then
-    
-                    echo "FOUND VOLUME TO MOUNT: " ${MOUNTPOINT}
+                     # mount devices that have not been mounted (no UUID)
+                    if [ "${UUID}" == "" ]; then
+
+                        echo "FOUND VOLUME TO MOUNT: " ${MOUNTPOINT}
 
                         if [ "${MOUNTPOINT}" == "swap" ]; then
-                    
+
                             if [ "${DEBUG}" = true ]; then
                                 echo "DEBUG MODE - ENABLE SWAP - DEBUG MODE"
                                 echo "mkswap ${FULLBLOCKDEVICE}"
@@ -119,7 +120,6 @@ for VOLUMEID in $(aws ec2 describe-instances --region ${AWS_REGION} --instance-i
                             fi
                             break;
                         fi;
-
                     fi
                 fi
             fi
